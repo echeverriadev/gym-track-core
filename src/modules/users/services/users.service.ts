@@ -84,7 +84,7 @@ export class UsersService {
 
   #mapEntityToDto(user): UserResponseDto {
     const response = new UserResponseDto();
-    response.id = user._id.toHexString();
+    response._id = user._id.toHexString();
     response.firstName = user.firstName;
     response.lastName = user.lastName;
     response.email = user.email;

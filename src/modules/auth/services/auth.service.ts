@@ -4,17 +4,22 @@ import { Model } from 'mongoose';
 import { User } from 'src/modules/users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { UserDto } from 'src/modules/users/dtos/user.dto';
+import { ErrorResponseDto } from 'src/modules/users/dtos/respose/error.response.dto';
 
 @Injectable()
 export class AuthService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserDto | ErrorResponseDto> {
     const user = await this.userModel.findOne({ email });
     const isMatchPassword = await bcrypt.compare(password, user.password);
     if (!user || !isMatchPassword) {
       return {
-        status: 404,
+        statusCode: 404,
         message: 'User not found',
       };
     }

@@ -1,5 +1,5 @@
 export class ErrorResponseDto {
   statusCode: number;
   message: string;
-  error: string;
+  error?: string;
 }
