@@ -3,13 +3,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/modules/users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 import { UserDto } from 'src/modules/users/dtos/user.dto';
 import { ErrorResponseDto } from 'src/modules/users/dtos/respose/error.response.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<User>,
+    private jwtService: JwtService,
+  ) {}
 
   async validateUser(
     email: string,
@@ -34,6 +37,6 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
     };
-    return jwt.sign(payload, 'your-secret-key', { expiresIn: '1h' }); // TODO: env variable
+    return await this.jwtService.signAsync(payload);
   }
 }
