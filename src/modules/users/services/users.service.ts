@@ -88,6 +88,9 @@ export class UsersService {
     response.firstName = user.firstName;
     response.lastName = user.lastName;
     response.email = user.email;
+    response.birthDay = user.birthDay;
+    response.height = user.height;
+    response.gender = user.gender;
     response.status = user.status;
     response.createdAt = user.createdAt;
     response.updatedAt = user.updatedAt;

@@ -1,11 +1,18 @@
 import {
   IsBoolean,
-  IsDate,
   IsEmail,
+  IsIn,
+  IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
+  IsPositive,
   IsString,
+  Max,
+  Min,
 } from 'class-validator';
+import { GENDERS } from '../utils/constants';
+import { Type } from 'class-transformer';
 
 export class UserDto {
   @IsNotEmpty()
@@ -25,6 +32,22 @@ export class UserDto {
   email;
 
   @IsNotEmpty()
+  @Type(() => Date)
+  birthDay;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @IsInt()
+  @IsPositive()
+  @Min(50)
+  @Max(270)
+  height;
+
+  @IsNotEmpty()
+  @IsIn(GENDERS)
+  gender: (typeof GENDERS)[number];
+
+  @IsNotEmpty()
   @IsString()
   password;
 
@@ -33,10 +56,10 @@ export class UserDto {
   status;
 
   @IsOptional()
-  @IsDate()
+  @Type(() => Date)
   createdAt?;
 
   @IsOptional()
-  @IsDate()
+  @Type(() => Date)
   updatedAt?;
 }

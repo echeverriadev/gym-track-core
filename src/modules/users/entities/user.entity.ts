@@ -1,5 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { GENDERS } from '../utils/constants';
+
+type Gender = (typeof GENDERS)[number];
 
 @Schema({ timestamps: true })
 export class User extends Document {
@@ -17,6 +20,15 @@ export class User extends Document {
     trim: true,
   })
   email: string;
+
+  @Prop({ required: true })
+  birthDay: Date;
+
+  @Prop({ required: true })
+  height: number;
+
+  @Prop({ required: true, enum: GENDERS })
+  gender: Gender;
 
   @Prop({ required: true })
   password: string;
