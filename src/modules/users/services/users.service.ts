@@ -6,14 +6,18 @@ import { CreateUserRequestDto } from '../dtos/request/create-user.request.dto';
 import { UserResponseDto } from '../dtos/respose/user.response.dto';
 import { ErrorResponseDto } from '../dtos/respose/error.response.dto';
 import { UpdateUserRequestDto } from '../dtos/request/update-user.request.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  create(
+  async create(
     user: CreateUserRequestDto,
   ): Promise<UserResponseDto | ErrorResponseDto> {
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    user.password = hashedPassword;
+
     return this.userModel
       .create(user)
       .then((user) => {
