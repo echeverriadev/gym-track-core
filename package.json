@@ -2,7 +2,7 @@
   "name": "gym-track-core",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Carlos Echeverría <55212109+echeverriadev@users.noreply.github.com>",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -45,12 +46,14 @@
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
     "jest": "^29.5.0",
+    "lint-staged": "^15.2.0",
     "nodemon": "^3.0.2",
     "prettier": "^3.0.0",
     "source-map-support": "^0.5.21",
@@ -77,5 +80,7 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "main": "index.js",
+  "repository": "git@github.com:echeverriadev/gym-track-core.git"
 }
