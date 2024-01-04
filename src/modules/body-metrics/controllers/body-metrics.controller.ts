@@ -2,8 +2,10 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   Request,
   UseGuards,
@@ -17,6 +19,7 @@ import { CreateMetricsRequestDto } from '../dtos/request/create-metrics.request.
 import { BodyMetricsCalculator } from '../utils/calculeta-body-metrics';
 import { ErrorResponseDto } from 'src/dtos/error.response.dto';
 import { BodyMetricsDto } from '../dtos/body-metrics.dto';
+import { UpdateMetricsRequestDto } from '../dtos/request/update-metrics.request.dto';
 
 @Controller('metrics')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -70,5 +73,20 @@ export class BodyMetricsController {
     @Param('id') id: string,
   ): Promise<BodyMetricsDto | ErrorResponseDto> {
     return this.bodyMetricsService.findById(id);
+  }
+
+  @Patch(':id')
+  @UseGuards(AuthGuard)
+  async update(
+    @Param('id') id: string,
+    @Body() updateMetricsDto: UpdateMetricsRequestDto,
+  ): Promise<BodyMetricsDto | ErrorResponseDto> {
+    return this.bodyMetricsService.update(id, updateMetricsDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  async delete(@Param('id') id: string): Promise<BodyMetricsDto> {
+    return this.bodyMetricsService.remove(id);
   }
 }
