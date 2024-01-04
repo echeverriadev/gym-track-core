@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
@@ -77,4 +78,7 @@ export class BodyMetricsDto {
   @IsPositive()
   @Max(100)
   bodyFatPercentage: number;
+
+  @IsNotEmpty()
+  createdAt: Date;
 }

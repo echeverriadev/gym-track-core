@@ -13,7 +13,7 @@ export class BodyMetricsService extends AbstractCrudService<BodyMetrics> {
     super(bodyMetricsModel);
   }
 
-  protected mapEntityToDto(record: BodyMetrics) {
+  protected mapEntityToDto(record: BodyMetrics): BodyMetricsDto {
     const dto = new BodyMetricsDto();
     dto.id = record.id;
     dto.userId = record.userId;
@@ -28,6 +28,7 @@ export class BodyMetricsService extends AbstractCrudService<BodyMetrics> {
     dto.calfsCircumference = record.calfsCircumference;
     dto.waistCircumference = record.waistCircumference;
     dto.hipCircumference = record.hipCircumference;
+    dto.createdAt = record.createdAt;
     return dto;
   }
 }

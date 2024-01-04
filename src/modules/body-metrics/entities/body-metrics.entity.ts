@@ -38,6 +38,9 @@ export class BodyMetrics extends Document {
 
   @Prop({ required: true })
   bmi: number;
+
+  @Prop()
+  createdAt: Date;
 }
 
 export const BodyMetricsSchema = SchemaFactory.createForClass(BodyMetrics).set(

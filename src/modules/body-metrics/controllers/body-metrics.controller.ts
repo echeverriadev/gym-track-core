@@ -2,6 +2,8 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Get,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -14,6 +16,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { CreateMetricsRequestDto } from '../dtos/request/create-metrics.request.dto';
 import { BodyMetricsCalculator } from '../utils/calculeta-body-metrics';
 import { ErrorResponseDto } from 'src/dtos/error.response.dto';
+import { BodyMetricsDto } from '../dtos/body-metrics.dto';
 
 @Controller('metrics')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -51,5 +54,21 @@ export class BodyMetricsController {
     createMetricsDto.muscleMass = muscleMass;
 
     return this.bodyMetricsService.create(createMetricsDto);
+  }
+
+  @Get(':id')
+  @UseGuards(AuthGuard)
+  async getByUser(
+    @Param('id') id: string,
+  ): Promise<BodyMetricsDto[] | ErrorResponseDto> {
+    return this.bodyMetricsService.find({ userId: id });
+  }
+
+  @Get('detail/:id')
+  @UseGuards(AuthGuard)
+  async getById(
+    @Param('id') id: string,
+  ): Promise<BodyMetricsDto | ErrorResponseDto> {
+    return this.bodyMetricsService.findById(id);
   }
 }
