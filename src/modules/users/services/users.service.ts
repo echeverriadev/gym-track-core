@@ -4,9 +4,9 @@ import { Model } from 'mongoose';
 import { User } from '../entities/user.entity';
 import { CreateUserRequestDto } from '../dtos/request/create-user.request.dto';
 import { UserResponseDto } from '../dtos/respose/user.response.dto';
-import { ErrorResponseDto } from '../dtos/respose/error.response.dto';
 import { UpdateUserRequestDto } from '../dtos/request/update-user.request.dto';
 import * as bcrypt from 'bcrypt';
+import { ErrorResponseDto } from 'src/dtos/error.response.dto';
 
 @Injectable()
 export class UsersService {

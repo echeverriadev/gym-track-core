@@ -13,6 +13,12 @@ export class BodyMetrics extends Document {
   armsCircumference: number[];
 
   @Prop({ required: true })
+  forearmsCircumference: number[];
+
+  @Prop({ required: true })
+  wristsCircumference: number[];
+
+  @Prop({ required: true })
   legsUpCircumference: number[];
 
   @Prop({ required: true })

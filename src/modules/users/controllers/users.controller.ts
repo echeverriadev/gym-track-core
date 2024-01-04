@@ -13,8 +13,8 @@ import {
 import { UsersService } from '../services/users.service';
 import { CreateUserRequestDto } from '../dtos/request/create-user.request.dto';
 import { UserResponseDto } from '../dtos/respose/user.response.dto';
-import { ErrorResponseDto } from '../dtos/respose/error.response.dto';
 import { UpdateUserRequestDto } from '../dtos/request/update-user.request.dto';
+import { ErrorResponseDto } from 'src/dtos/error.response.dto';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
