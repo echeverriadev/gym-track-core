@@ -70,6 +70,7 @@
     ],
     "roots": ["<rootDir>/src"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "testPathIgnorePatterns": ["/node_modules/", "<rootDir>/src/main.ts", "<rootDir>/src/dto/"],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
