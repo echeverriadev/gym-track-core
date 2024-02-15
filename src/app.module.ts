@@ -3,10 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BodyMetricsModule } from './modules/body-metrics/bodyMetrics.module';
+import { DatabaseConfig } from 'config/database.config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/gym-track'),
+    MongooseModule.forRootAsync({
+      useClass: DatabaseConfig,
+    }),
     AuthModule,
     BodyMetricsModule,
     UsersModule,
