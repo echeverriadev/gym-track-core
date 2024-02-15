@@ -1,7 +1,8 @@
 import {
   BadRequestException,
-  HttpStatus,
+  ConflictException,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import mongoose, {
   Model,
@@ -29,9 +30,6 @@ export abstract class AbstractCrudService<T extends Document> {
 
     return this.model
       .create(mappedEntity)
-      .catch((error) => {
-        return error;
-      })
       .then((record) => this.afterCreate(record))
       .then((record) => {
         if (!record) {
@@ -39,6 +37,9 @@ export abstract class AbstractCrudService<T extends Document> {
         }
 
         return this.mapEntityToDto(record);
+      })
+      .catch((error) => {
+        this.#throwUnhandledError(error, 'create', 'Error creating record');
       });
   }
 
@@ -46,7 +47,7 @@ export abstract class AbstractCrudService<T extends Document> {
     return this.model
       .find(filter)
       .catch((error) => {
-        return error;
+        this.#throwUnhandledError(error, 'find', 'Error finding records');
       })
       .then((records) => {
         if (!records) {
@@ -63,7 +64,7 @@ export abstract class AbstractCrudService<T extends Document> {
     return this.model
       .findById(id)
       .catch((error) => {
-        return error;
+        this.#throwUnhandledError(error, 'findById', 'Error finding record');
       })
       .then((record) => {
         if (!record) {
@@ -82,7 +83,7 @@ export abstract class AbstractCrudService<T extends Document> {
     return this.model
       .findOne(filter, projection, options)
       .catch((error) => {
-        return error;
+        this.#throwUnhandledError(error, 'findOne', 'Error finding record');
       })
       .then((record) => {
         if (!record) {
@@ -101,7 +102,11 @@ export abstract class AbstractCrudService<T extends Document> {
         returnDocument: 'after',
       })
       .catch((error) => {
-        return error;
+        this.#throwUnhandledError(
+          error,
+          'findOneAndUpdate',
+          'Error updating record',
+        );
       })
       .then((record) => {
         if (!record) {
@@ -127,9 +132,6 @@ export abstract class AbstractCrudService<T extends Document> {
       .findByIdAndUpdate(id, updateQuery, {
         returnDocument: 'after',
       })
-      .catch((error) => {
-        return error;
-      })
       .then((record) => this.afterUpdate(record))
       .then((record) => {
         if (!record) {
@@ -137,6 +139,9 @@ export abstract class AbstractCrudService<T extends Document> {
         }
 
         return this.mapEntityToDto(record);
+      })
+      .catch((error) => {
+        this.#throwUnhandledError(error, 'update', 'Error updating record');
       });
   }
 
@@ -154,9 +159,6 @@ export abstract class AbstractCrudService<T extends Document> {
       .findOneAndUpdate(filter, updateQuery, {
         returnDocument: 'after',
       })
-      .catch((error) => {
-        return error;
-      })
       .then((record) => this.afterUpdate(record))
       .then((record) => {
         if (!record) {
@@ -164,6 +166,9 @@ export abstract class AbstractCrudService<T extends Document> {
         }
 
         return this.mapEntityToDto(record);
+      })
+      .catch((error) => {
+        this.#throwUnhandledError(error, 'updateOne', 'Error updating record');
       });
   }
 
@@ -172,15 +177,15 @@ export abstract class AbstractCrudService<T extends Document> {
 
     return this.model
       .findByIdAndDelete(id)
-      .catch((error) => {
-        return error;
-      })
       .then((record) => {
         if (!record) {
           throw new NotFoundException(`${this.model.name} not found`);
         }
 
-        return this.mapEntityToDto(record);
+        return this.mapEntityToDto(record as unknown as T);
+      })
+      .catch((error) => {
+        this.#throwUnhandledError(error, 'remove', 'Error deleting record');
       });
   }
 
@@ -196,13 +201,17 @@ export abstract class AbstractCrudService<T extends Document> {
         returnDocument: 'after',
       })
       .catch((error) => {
-        return error;
+        this.#throwUnhandledError(
+          error,
+          'updateMany',
+          'Error updating records',
+        );
       });
   }
 
   async deleteMany(filter: FilterQuery<T>): Promise<void> {
     await this.model.deleteMany(filter).catch((error) => {
-      return error;
+      this.#throwUnhandledError(error, 'deleteMany', 'Error deleting records');
     });
   }
 
@@ -218,7 +227,11 @@ export abstract class AbstractCrudService<T extends Document> {
       .skip(skip)
       .limit(limit)
       .catch((error) => {
-        return error;
+        this.#throwUnhandledError(
+          error,
+          'findPaginated',
+          'Error finding records',
+        );
       })
       .then((records) => {
         if (!records) {
@@ -237,12 +250,10 @@ export abstract class AbstractCrudService<T extends Document> {
     return Promise.resolve(record);
   }
 
-  protected throwValidationError(message: string): never {
-    throw new BadRequestException({
-      statusCode: HttpStatus.BAD_REQUEST,
-      message: [message],
-      error: 'Bad Request',
-    });
+  #throwUnhandledError(error: any, context: string, message: string) {
+    if (error instanceof NotFoundException) throw error;
+    if (error instanceof UnprocessableEntityException) throw error;
+    throw new ConflictException(error, message);
   }
 
   protected validateObjectId(id: string) {

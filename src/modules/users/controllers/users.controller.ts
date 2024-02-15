@@ -2,6 +2,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -16,6 +17,7 @@ import { UserResponseDto } from '../dtos/respose/user.response.dto';
 import { UpdateUserRequestDto } from '../dtos/request/update-user.request.dto';
 import { ErrorResponseDto } from 'src/dtos/error.response.dto';
 import * as bcrypt from 'bcrypt';
+
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe())
@@ -46,6 +48,24 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserRequestDto,
   ): Promise<UserResponseDto | ErrorResponseDto> {
+    if (updateUserDto._id || updateUserDto.email) {
+      return Promise.reject({
+        statusCode: 400,
+        message: 'You cannot update the _id or email',
+      });
+    }
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string): Promise<UserResponseDto | ErrorResponseDto> {
+    return this.usersService.remove(id);
+  }
+
+  @Patch('disable/:id')
+  disable(
+    @Param('id') id: string,
+  ): Promise<UserResponseDto | ErrorResponseDto> {
+    return this.usersService.update(id, { status: false });
   }
 }

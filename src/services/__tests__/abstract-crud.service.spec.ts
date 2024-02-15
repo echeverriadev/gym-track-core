@@ -64,10 +64,6 @@ class MockService extends AbstractCrudService<MockModel> {
     await mockValidator(request, context);
   }
 
-  mockValidationError() {
-    this.throwValidationError('Validation Error');
-  }
-
   protected mapEntityToDto(record: MockModel): MockDto {
     const mockDto = new MockDto();
     mockDto.countryCode = record.countryCode;

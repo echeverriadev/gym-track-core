@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsDate,
   IsEmail,
   IsIn,
   IsInt,
@@ -32,8 +33,9 @@ export class UserDto {
   email;
 
   @IsNotEmpty()
+  @IsDate()
   @Type(() => Date)
-  birthDay;
+  birthDay: Date;
 
   @IsNotEmpty()
   @IsNumber()
