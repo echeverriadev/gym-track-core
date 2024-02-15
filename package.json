@@ -31,6 +31,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "dot-object": "^2.1.4",
+    "dotenv": "^16.4.4",
     "mongoose": "^8.0.3",
     "passport": "^0.7.0",
     "reflect-metadata": "^0.1.13",
@@ -68,7 +69,9 @@
       "json",
       "ts"
     ],
-    "roots": ["<rootDir>/src"],
+    "roots": [
+      "<rootDir>/src"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
